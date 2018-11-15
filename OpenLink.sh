@@ -1,16 +1,23 @@
 # !/bin/bash
 
-filePath=`pbpaste`
-parsedLink="${filePath/\//}"
+clipboard=`pbpaste`
+filePath="$clipboard"
+parsedLink=
 
+function linkToPath(){
+    echo "${1/\//}"
+}
+
+function smbToPath(){
+    echo "${1// /%20}" | sed 's!smb://bcl-data4!file://localhost/Volumes!'
+}
 
 if [[  "$filePath" == file:///*  ]]; then
-    open $parsedPath
-    else
+    open `linkToPath "$filePath"`
+    elif [[  $filePath == smb://*  ]]; then
+    open `smbToPath "$filePath"`
+    # open `smbToPath "$filepath"`
+    else 
     open "$filePath"
 fi
 
-
-
-# file:///localhost/Volumes/Brave/Brave%20Creative/2018/AGE%20UK/300760_Age%20UK%20Pitch
-# file://localhost/Volumes/Brave/Brave%20Creative/2018/AGE%20UK/300760_Age%20UK%20Pitch
